@@ -56,6 +56,10 @@ jobs:
         tar --bzip2 -xf boost_1_79_0.tar.bz2 boost_1_79_0/boost/
         mv boost_1_79_0/boost $GITHUB_WORKSPACE/include/
         ls -l $GITHUB_WORKSPACE/include/
+        export BOOST_ROOT=$GITHUB_WORKSPACE/include/boost
+        export BOOST_LIBRARYDIR=/usr/lib64
+        export BOOST_INCLUDEDIR=$GITHUB_WORKSPACE/include/boost
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 
     - name: Install cibuildwheel
       run: pip install cibuildwheel==2.12.0
@@ -68,7 +72,7 @@ jobs:
           sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
           sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
           yum -y install epel-release
-          yum -y install gmp-devel mpfr-devel boost boost-thread boost-devel
+          yum -y install gmp-devel mpfr-devel boost boost-devel boost-thread boost-system boost-atomic boost-date-time boost-chrono
 
     - uses: actions/upload-artifact@v3
       with:
