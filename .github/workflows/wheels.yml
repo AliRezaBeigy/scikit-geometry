@@ -53,13 +53,13 @@ jobs:
     - name: Setup boost dependencies
       run: |
         wget -nv https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2 -O boost_1_79_0.tar.bz2
-        tar --bzip2 -xf boost_1_79_0.tar.bz2 boost_1_79_0/boost/
-        mv boost_1_79_0/boost $GITHUB_WORKSPACE/include/
-        ls -l $GITHUB_WORKSPACE/include/
-        export BOOST_ROOT=$GITHUB_WORKSPACE/include/boost
-        export BOOST_LIBRARYDIR=/usr/lib64
-        export BOOST_INCLUDEDIR=$GITHUB_WORKSPACE/include/boost
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
+        tar --bzip2 -xf boost_1_79_0.tar.bz2 boost_1_79_0/
+        cd boost_1_79_0
+        ./bootstrap.sh --prefix=$GITHUB_WORKSPACE/boost
+        ./b2 install
+        export BOOST_ROOT=$GITHUB_WORKSPACE/boost
+        export BOOST_INCLUDEDIR=$BOOST_ROOT/include
+        export BOOST_LIBRARYDIR=$BOOST_ROOT/lib
 
     - name: Install cibuildwheel
       run: pip install cibuildwheel==2.12.0
